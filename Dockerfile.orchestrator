@@ -1,0 +1,24 @@
+# Use Node.js 22 (LTS) Alpine as the base image for a small footprint
+FROM node:22-alpine AS runner
+
+# Set working directory
+WORKDIR /app
+
+# In a full monorepo setup, you'd typically use pnpm workspaces and copy only the necessary packages.
+# For this worker, we'll install 'tsx' globally and copy the typescript files directly.
+RUN npm install -g tsx
+
+# Copy the orchestration scripts into the container
+COPY scripts/orchestration ./scripts/orchestration
+
+# Define required Environment Variables
+ENV NODE_ENV=production
+ENV PDS_HOST="https://atproto.etzhayyim.com"
+# ENV ETZHAYYIM_TOKEN="<inject via k8s secrets>"
+
+# Create a non-root user for security
+RUN addgroup -S tsukuru && adduser -S tsukuru -G tsukuru
+USER tsukuru
+
+# Start the continuous daemon process
+CMD ["tsx", "scripts/orchestration/daemon.ts"]

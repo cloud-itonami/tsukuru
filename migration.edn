@@ -1,0 +1,1 @@
+{:schema "etzhayyim.migration/v1" :source {:repository "etzhayyim/root" :revision "cc681c5a5be287a59f7a330e44f5675ecb530490" :path "60-apps/etzhayyim-project-tsukuru" :tree "220d32afa118755a78a5ddb56618adf66791c5b1" :tracked-files 35 :bytes 151875} :destination {:repository "etzhayyim/com-etzhayyim-app-tsukuru"} :identity {:allowed-additions ["README.edn" "migration.edn"]}}

@@ -1,0 +1,80 @@
+> **DEPRECATED**: Actor migrated to `20-actors/tsukuru/actor-manifest.jsonld` (T1 MCP-Compose). This project wasm/*/src/app.ts is retained as T3 fallback only.
+
+# etzhayyim-project-tsukuru
+
+B2B factory-direct ordering platform for `tsukuru.etzhayyim.com`.
+
+## Canonical IDs and Naming Rules
+
+- Canonical nanoid is `tsukr8u0`.
+- `0ljdfw8u` is deprecated (alpha-start violation) and must not be used in new paths, hosts, component names, or deploy commands.
+- Canonical app/component name is `tsukuru` (not `tsukuru-api`).
+
+## Runtime and Endpoint Rules
+
+- API base URL: `https://tsukr8u0.etzhayyim.com/xrpc`.
+- DID root: `did:web:tsukuru.etzhayyim.com`.
+- Manufacturer DID model remains path-based dynamic multi-DID (`performerType=service`).
+
+## Manufacturer Registry Rules
+
+- Active collection name: `com.etzhayyim.apps.tsukuru.manufacturer`.
+- Historical collection for migration/read-compat: `com.etzhayyim.apps.tsukuru-api.manufacturer`.
+- Registry scale assumption: 460+ manufacturer DIDs across 30+ countries.
+
+## Write Buffer Rule
+
+- Use unified batch-flush write-buffer path for graph writes.
+- Optimization target and current reference: Shannon efficiency `η = 99.8%`.
+- Avoid ad-hoc per-record flush patterns unless explicitly required for correctness.
+
+## Required WIT Packages
+
+- `etzhayyim:tsukuru@0.1.0`
+- `etzhayyim:tsukuru-process-registry@1.0.0`
+- `etzhayyim:tsukuru-manufacturer-registry@1.0.0`
+- `etzhayyim:tsukuru-trade-compliance@1.0.0`
+- `etzhayyim:tsukuru-production-order@1.0.0`
+
+## Production Order (BTO/OEM)
+
+**WIT**: `etzhayyim:tsukuru-production-order@1.0.0` — production-order, production-progress, quality-inspection
+
+**Record kinds** (`com.etzhayyim.apps.tsukuru.*`): `production_order`, `production_progress`, `quality_inspection`
+
+**Flow**: okaimono order (paid) → `create-production-order` → factory DID Invoke → progress updates → QC → ship
+
+**Fulfillment modes**: `bto` (Build-to-Order), `mto` (Made-to-Order), `cto` (Configure-to-Order)
+
+設計: `90-docs/260326-okaimono-bto-oem-manufacturing-design.md`
+
+**Convo Integration**: `yoro.etzhayyim.com/profile/did:web:tsukr8u0.etzhayyim.com` → メッセージ → Murakumo LLM + MCP tool calling で製造プロジェクト実行。`convoSystemPrompt` (kotodama.jsonld) でガイダンス。
+
+## Cross-Project Dependencies
+
+| Project | Integration | Purpose |
+|---|---|---|
+| `etzhayyim-project-cpc` | WIT bidirectional dependency | CPC process resolution and performer linking |
+| `etzhayyim-project-resources` | XRPC `CreateResource` | Supplier/resource synchronization |
+| `etzhayyim-project-legal-entity` | `Invoke` LEI lookup | Legal entity verification |
+| `etzhayyim-project-yabai` | `Invoke` `ScreenEntity` | Sanctions and denied-party screening |
+| `etzhayyim-project-trust` | `Invoke` `GetTrustScore` | DID trust scoring |
+| `etzhayyim-project-completer` | `Invoke` `EvaluateCompliance` | Trade/regulatory compliance evaluation |
+| `etzhayyim-project-treaty` | Authority chain | FTA/EPA trade agreement resolution |
+| `etzhayyim-project-industry-standard` | Authority chain follow | ISO and industry standard tracking |
+| `etzhayyim-project-maps` | Graph `:LOCATED_IN` relation | Factory geolocation linkage |
+| `etzhayyim-project-supply-chain` | Graph `:SUPPLIES` relation | Upstream/downstream risk and supplier graph |
+| `etzhayyim-project-okaimono` | Catalog integration | Factory-direct catalog federation |
+
+## Build and Deploy
+
+```bash
+cd 60-apps/etzhayyim-project-tsukuru/wasm/tsukuru-tsukr8u0
+etzhayyim build
+etzhayyim deploy --smoke-url https://tsukr8u0.etzhayyim.com/health
+```
+
+## Storage and Access Rules
+
+- Graph access must go through `G()` builder only.
+- Keep fallback behavior explicit and minimal when graph is unavailable.

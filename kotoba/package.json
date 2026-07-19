@@ -1,0 +1,16 @@
+{
+  "name": "@etzhayyim/tsukuru-kotoba",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "tsukuru kotoba reference implementation per ADR-2605202800 Phase 2. Uses @etzhayyim/sdk for PDS XRPC writes + USDC pay() instead of vendor's createKyselyDb + Stripe Issuing.",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@etzhayyim/sdk": "git+https://github.com/etzhayyim/com-etzhayyim-sdk.git#12314a0cc5ac2feb49dd9789d5c002398acb6988"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}

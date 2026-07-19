@@ -1,0 +1,289 @@
+{
+  "@context": {
+    "etzhayyim": "https://resources.etzhayyim.com/etzhayyim-project-resources/id/",
+    "schema": "https://schema.org/",
+    "dodaf": "https://resources.etzhayyim.com/etzhayyim-project-resources/id/DM2/"
+  },
+  "@type": "etzhayyim:Project",
+  "@id": "https://resources.etzhayyim.com/etzhayyim-project-tsukuru/id/Project/etzhayyim-project-tsukuru",
+  "schema:name": "etzhayyim-project-tsukuru",
+  "schema:description": "B2B Factory-Direct Ordering Platform. Alibaba-style marketplace connecting business buyers directly with manufacturers. Covers supplier/factory profiles, product catalog with tiered pricing, RFQ/quotation marketplace, sample ordering, bulk order management, Trade Assurance (escrow), quality inspection, dispute resolution, and buyer-supplier messaging.",
+  "schema:url": "https://tsukuru.etzhayyim.com",
+  "dodaf:capability": [
+    {
+      "@type": "dodaf:Capability",
+      "schema:name": "Supplier Catalog Management",
+      "schema:description": "Factory/supplier profile registration, verification tiers (Gold, Verified Manufacturer), product listing with tiered MOQ pricing, OEM/ODM customization flags, and production capacity details."
+    },
+    {
+      "@type": "dodaf:Capability",
+      "schema:name": "RFQ Marketplace",
+      "schema:description": "Buyer-initiated Request for Quotation system. Buyers post requirements (specs, quantity, target price); qualified suppliers submit competitive quotations. Buyer compares, shortlists, and accepts."
+    },
+    {
+      "@type": "dodaf:Capability",
+      "schema:name": "Sample Ordering",
+      "schema:description": "Dedicated workflow for small-quantity sample orders before bulk commitment. Includes sample production, express shipping, quality evaluation, revision loop, and approval."
+    },
+    {
+      "@type": "dodaf:Capability",
+      "schema:name": "Bulk Order Management",
+      "schema:description": "Full production-to-delivery lifecycle: order creation from accepted quotation, payment, production milestones, pre-shipment inspection, shipping/tracking, and receipt confirmation."
+    },
+    {
+      "@type": "dodaf:Capability",
+      "schema:name": "Trade Assurance (Escrow)",
+      "schema:description": "Escrow-based payment protection. Buyer funds held until receipt confirmed and quality terms met. Supports trade-assurance, bank transfer, and letter of credit."
+    },
+    {
+      "@type": "dodaf:Capability",
+      "schema:name": "Quality Inspection",
+      "schema:description": "Pre-shipment and in-production quality inspection records. Support for self-inspection (photos/video) and third-party inspectors (SGS, Intertek). Linked to order quality terms."
+    },
+    {
+      "@type": "dodaf:Capability",
+      "schema:name": "KAMI 3D Manufacturing Cell",
+      "schema:description": "3D manufacturing-cell planning using kami-engine-sdk. Models CNC machines, 3D printers, robot arms, material-handling equipment, fixtures, workpieces, safety zones, and workflow steps in millimeter scene units."
+    },
+    {
+      "@type": "dodaf:Capability",
+      "schema:name": "Machine Output Planning",
+      "schema:description": "Device output planning for CNC G-code, 3D-printer Marlin-style G-code, robot-arm waypoint programs, material-handling flow routes, and inspection programs."
+    },
+    {
+      "@type": "dodaf:Capability",
+      "schema:name": "Industrial Software Stack Integration",
+      "schema:description": "Design-to-operations integration across RFQ/requirements, CAD, CAE, CAM, PLM, MES, SCADA/PLC, QMS, WMS, TMS, ERP, CMMS/EAM, digital twin, route planning, fleet control, drone control, and autonomous-driving systems."
+    },
+    {
+      "@type": "dodaf:Capability",
+      "schema:name": "Logistics, Drone, and Autonomous Operation Planning",
+      "schema:description": "Route and mission planning for intra-factory transport, yard movement, road/rail/sea/air shipment, drones, AGVs, AMRs, robot arms, and autonomous vehicles with handoff records, telemetry topics, geofences, ODD constraints, and emergency procedures."
+    },
+    {
+      "@type": "dodaf:Capability",
+      "schema:name": "Dispute Resolution",
+      "schema:description": "Structured dispute filing, evidence submission, mediation workflow, and resolution linked to Trade Assurance refund/release."
+    },
+    {
+      "@type": "dodaf:Capability",
+      "schema:name": "Buyer-Supplier Messaging",
+      "schema:description": "Direct messaging threads for negotiation, customization discussion, and order coordination between buyers and suppliers."
+    }
+  ],
+  "dodaf:performer": [
+    {
+      "@type": "dodaf:Performer",
+      "schema:name": "tsukuru-component",
+      "schema:identifier": "etzhayyim-wasm-tsukuru-0ljdfw8u",
+      "schema:description": "SpinApp component exporting etzhayyim:tsukuru/* WIT interfaces (catalog, rfq-market, orders, disputes, messaging). API at 0ljdfw8u.etzhayyim.com/api/grpc."
+    }
+  ],
+  "rdfUnifiedDocuments": {
+    "@type": "schema:Dataset",
+    "schema:name": "Unified top-level RDF/JSON-LD documents",
+    "schema:description": "Consolidated from project top-level *.jsonld files except PROJECT.jsonld.",
+    "documents": [
+      {
+        "fileName": "activities.jsonld",
+        "content": {
+          "@context": "https://schema.org/",
+          "@type": "OperationalActivity",
+          "name": "B2B Factory-Direct Lifecycle (OV-5b)",
+          "description": "End-to-end B2B ordering workflow from product discovery to delivery.",
+          "step": [
+            {
+              "@type": "Action",
+              "name": "Supplier Onboarding",
+              "participant": "Supplier",
+              "instrument": "Clerk IdP, Verification Audit",
+              "result": "Verified Factory Profile with Production Capabilities"
+            },
+            {
+              "@type": "Action",
+              "name": "Product Catalog Listing",
+              "participant": "Supplier",
+              "instrument": "tsukuru catalog interface",
+              "result": "Active Product Listings with Tiered Pricing"
+            },
+            {
+              "@type": "Action",
+              "name": "RFQ Submission",
+              "participant": "Buyer",
+              "instrument": "tsukuru rfq-market interface",
+              "result": "Published RFQ with Requirements"
+            },
+            {
+              "@type": "Action",
+              "name": "Quotation & Negotiation",
+              "participant": "Supplier",
+              "instrument": "tsukuru rfq-market + messaging interfaces",
+              "result": "Accepted Quotation with Agreed Terms"
+            },
+            {
+              "@type": "Action",
+              "name": "Sample Ordering",
+              "participant": "Buyer",
+              "instrument": "tsukuru orders interface",
+              "result": "Approved Sample (quality confirmed)"
+            },
+            {
+              "@type": "Action",
+              "name": "Bulk Order & Escrow",
+              "participant": "Buyer + Supplier",
+              "instrument": "tsukuru orders + escrow",
+              "result": "Payment in Escrow, Production Started"
+            },
+            {
+              "@type": "Action",
+              "name": "Quality Inspection",
+              "participant": "Inspector (self or third-party)",
+              "instrument": "tsukuru orders interface",
+              "result": "Inspection Report (pass/fail)"
+            },
+            {
+              "@type": "Action",
+              "name": "KAMI 3D Cell & Device Output Planning",
+              "participant": "Supplier + Automation Engineer",
+              "instrument": "kami-engine-sdk manufacturing interface",
+              "result": "3D manufacturing cell, CNC/3D-printer output, robot-arm operation, and material-handling route"
+            },
+            {
+              "@type": "Action",
+              "name": "Industrial Software Integration",
+              "participant": "Engineering + Operations + Logistics",
+              "instrument": "kami-engine-sdk industrial software integration interface",
+              "result": "CAD/CAE/CAM/PLM/MES/SCADA/QMS/WMS/TMS/ERP/CMMS/digital-twin data contract plan"
+            },
+            {
+              "@type": "Action",
+              "name": "Logistics and Autonomy Planning",
+              "participant": "Logistics Planner + Automation Engineer",
+              "instrument": "kami-engine-sdk logistics route and autonomy operation interfaces",
+              "result": "Transport route, drone mission, AGV/robot plan, or autonomous-driving operation plan"
+            },
+            {
+              "@type": "Action",
+              "name": "Shipping & Delivery",
+              "participant": "Supplier + Logistics",
+              "instrument": "tsukuru orders interface",
+              "result": "Delivered Goods with Tracking"
+            },
+            {
+              "@type": "Action",
+              "name": "Receipt Confirmation & Payment Release",
+              "participant": "Buyer",
+              "instrument": "tsukuru orders interface",
+              "result": "Escrow Released to Supplier"
+            }
+          ]
+        }
+      },
+      {
+        "fileName": "capabilities.jsonld",
+        "content": {
+          "@context": "https://schema.org/",
+          "@type": "Capability",
+          "name": "Tsukuru B2B Factory Capabilities",
+          "description": "WIT interfaces and services for the factory-direct ordering platform.",
+          "hasPart": [
+            {
+              "@type": "Service",
+              "name": "Catalog Service",
+              "identifier": "etzhayyim:tsukuru/catalog@0.1.0",
+              "description": "Supplier profile and product catalog management with tiered pricing and OEM/ODM flags."
+            },
+            {
+              "@type": "Service",
+              "name": "RFQ Market Service",
+              "identifier": "etzhayyim:tsukuru/rfq-market@0.1.0",
+              "description": "RFQ creation, supplier quotation submission, comparison, and acceptance workflow."
+            },
+            {
+              "@type": "Service",
+              "name": "Order Service",
+              "identifier": "etzhayyim:tsukuru/orders@0.1.0",
+              "description": "Sample orders, bulk orders, quality inspection, escrow management, and receipt confirmation."
+            },
+            {
+              "@type": "Service",
+              "name": "KAMI Manufacturing Cell Service",
+              "identifier": "etzhayyim:tsukuru/kami-manufacturing-cell@0.1.0",
+              "description": "KAMI Engine SDK backed 3D cell design, CNC/3D-printer output planning, robot-arm operation planning, and material-handling flow planning."
+            },
+            {
+              "@type": "Service",
+              "name": "Industrial Software Integration Service",
+              "identifier": "etzhayyim:tsukuru/industrial-software-integration@0.1.0",
+              "description": "CAD/CAE/CAM/PLM/MES/SCADA/QMS/WMS/TMS/ERP/CMMS/digital-twin/route/fleet/drone/autonomous-driving integration planning."
+            },
+            {
+              "@type": "Service",
+              "name": "Logistics and Autonomy Planning Service",
+              "identifier": "etzhayyim:tsukuru/logistics-autonomy@0.1.0",
+              "description": "Transport route planning, custody handoff planning, drone mission planning, AGV/robot mission planning, and autonomous-driving operation planning."
+            },
+            {
+              "@type": "Service",
+              "name": "Dispute Service",
+              "identifier": "etzhayyim:tsukuru/disputes@0.1.0",
+              "description": "Dispute filing, evidence submission, mediation, and resolution workflow."
+            },
+            {
+              "@type": "Service",
+              "name": "Messaging Service",
+              "identifier": "etzhayyim:tsukuru/messaging@0.1.0",
+              "description": "Buyer-supplier direct messaging for negotiation and order coordination."
+            }
+          ]
+        }
+      },
+      {
+        "fileName": "scheduler.jsonld",
+        "content": {
+          "@context": [
+            "https://schema.org/",
+            {
+              "etzhayyim": "https://etzhayyim.com/schemas/",
+              "milestones": "etzhayyim:milestones",
+              "blockers": "etzhayyim:blockers"
+            }
+          ],
+          "@type": "CreativeWork",
+          "name": "Tsukuru B2B Factory Scheduler",
+          "identifier": "etzhayyim-project-tsukuru/scheduler",
+          "description": "Project schedule (milestones) and blockers.",
+          "dateCreated": "2026-02-28T00:00:00+00:00",
+          "milestones": [
+            {
+              "name": "Phase 1: WIT + Proto + WADM Design",
+              "target": "2026-03-07",
+              "status": "in-progress"
+            },
+            {
+              "name": "Phase 2: Catalog + RFQ Core Implementation",
+              "target": "2026-03-21",
+              "status": "planned"
+            },
+            {
+              "name": "Phase 3: Orders + Escrow + Inspection",
+              "target": "2026-04-04",
+              "status": "planned"
+            },
+            {
+              "name": "Phase 4: UI (SvelteKit + AppShell v2) + R2 Static",
+              "target": "2026-04-18",
+              "status": "planned"
+            },
+            {
+              "name": "Phase 5: Dispute Resolution + Messaging + GA",
+              "target": "2026-05-02",
+              "status": "planned"
+            }
+          ],
+          "blockers": []
+        }
+      }
+    ]
+  }
+}

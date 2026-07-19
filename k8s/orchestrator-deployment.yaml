@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tsukuru-orchestrator-daemon
+  namespace: tsukuru-production
+  labels:
+    app: tsukuru-orchestrator
+    component: bpmn-worker
+spec:
+  replicas: 1 # Starts with 1 replica; can scale based on queue depth
+  selector:
+    matchLabels:
+      app: tsukuru-orchestrator
+  template:
+    metadata:
+      labels:
+        app: tsukuru-orchestrator
+        component: bpmn-worker
+    spec:
+      serviceAccountName: tsukuru-worker-sa
+      containers:
+        - name: orchestrator-daemon
+          image: etzhayyim/tsukuru-orchestrator:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PDS_HOST
+              value: "https://atproto.etzhayyim.com"
+            # In a real environment, load tokens from Kubernetes Secrets
+            - name: etzhayyim_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: tsukuru-worker-secrets
+                  key: atproto-app-token
+          # Liveness and Readiness probes to ensure the worker is healthy
+          # (Since this is a background daemon without an HTTP server,
+          # we would typically check a local health file or process status)
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - -f
+                - "node"
+            initialDelaySeconds: 5
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tsukuru-worker-secrets
+  namespace: tsukuru-production
+type: Opaque
+stringData:
+  # Base64 encoded token goes here, or managed by ExternalSecrets operator
+  atproto-app-token: "REPLACE_WITH_ACTUAL_TOKEN"

@@ -1,0 +1,10 @@
+{
+  "name": "tsukuru-tsukr8u0",
+  "version": "1.0.0",
+  "description": "tsukuru.etzhayyim.com — Global B2B Manufacturing Platform",
+  "main": "src/app.ts",
+  "type": "module",
+  "dependencies": {
+    "@etzhayyim/kotodama-host-sdk": "workspace:*"
+  }
+}
