@@ -1,0 +1,67 @@
+;; mk1-sandwich — 叢雲 MK-1 sandwich enclosure (cto)
+;; 正本: 90-docs/hardware/mk1-parts.datoms.edn (ADR-2607270000 確定値)
+;; この宣言は同カタログの tsukuru.design/product 形への射影。
+;; 衝突したら ADR 側が正。
+;;
+;; 配置は ADR-2607270000 の sandwich レイアウト:
+;;   board 室 (mobo + cooler + ram + ssd + riser) と gpu 室を X 方向に並べ、
+;;   PSU は着脱ブラケット (ADR §9c: L 字隅単一軸挿入不可の発見)。
+;; 座標系: X = sandwich 厚み方向 / Y = 高さ / Z = 奥行。原点は筐体内寸 min corner。
+;; envelope の軸順はカタログの設置姿勢 [x y z] をそのまま使う。
+{:product/id "mk1-sandwich"
+ :product/name "叢雲 MK-1 sandwich enclosure (Arc Pro B70)"
+ :product/fulfillment-mode :cto
+ :wall-mm 3
+ :parts
+ [{:part/id "mobo-b650i"  :part/name "ASRock B650I Lightning WiFi (mini-ITX)"
+  :part/envelope [36 170 170] :part/mass-g 480 :part/power-w 15 :part/qty 1
+  ;; mobo サブアセンブリ一体は chassis 組み込みステップで +X から入るが、
+  ;; その時点で gpu/psu は未装着 = 障害になり得ない。bench 先組みと同じく
+  ;; :none (subassembly 構成員) として扱う。
+  :part/insert-axis :none :part/fit-class :standard}
+  {:part/id "cpu-7700"    :part/name "AMD Ryzen 7 7700 (8C/16T, 65W)"
+   :part/envelope [8 40 40] :part/mass-g 75 :part/power-w 65 :part/qty 1
+   :part/mounts-on "mobo-b650i" :part/insert-axis :none :part/fit-class :fit}
+  {:part/id "cooler-lp"   :part/name "低背 CPU クーラー 37mm / 95x95 (NH-L9a-AM5 級)"
+   :part/envelope [37 95 95] :part/mass-g 385 :part/power-w 3 :part/qty 1
+   :part/mounts-on "cpu-7700" :part/insert-axis :none :part/fit-class :fit}
+  {:part/id "ram-ddr5"    :part/name "DDR5-5600 16GB UDIMM"
+   :part/envelope [4 32 134] :part/mass-g 35 :part/power-w 6 :part/qty 2
+   :part/mounts-on "mobo-b650i" :part/insert-axis :none :part/fit-class :fit}
+  {:part/id "ssd-m2"      :part/name "1TB PCIe 4.0 NVMe M.2 2280 (mobo 裏面実装)"
+   :part/envelope [4 22 80] :part/mass-g 8 :part/power-w 7 :part/qty 1
+   :part/mounts-on "mobo-b650i" :part/insert-axis :none :part/fit-class :fit}
+  {:part/id "riser"       :part/name "PCIe 5.0 x16 フレキシブルライザー 200mm"
+   :part/envelope [10 30 200] :part/mass-g 60 :part/power-w 0 :part/qty 1
+   :part/mounts-on "mobo-b650i" :part/insert-axis :none :part/fit-class :loose}
+  {:part/id "gpu-b70"     :part/name "Intel Arc Pro B70 32GB GDDR6 (dual-slot blower)"
+   :part/envelope [39 110 267] :part/mass-g 1050 :part/power-w 230 :part/qty 1
+   :part/mounts-on "riser" :part/insert-axis :x :part/fit-class :standard}
+  {:part/id "psu-sfx750"  :part/name "750W SFX 80+ Gold (ATX 3.1 / 12V-2x6)"
+   :part/envelope [125 63 100] :part/mass-g 1000 :part/power-w 0 :part/qty 1
+   :part/insert-axis :x :part/fit-class :standard}]
+
+ ;; 配置 (board 室 → gpu 室 → psu)。ADR-2607270000 の sandwich:
+ ;;  YZ 投影での重なりを嵌合親子 (+X 面での bench 先組み) を除いてゼロにする:
+ ;;   ssd は Y 60-82 / Z 30-110 — mobo 裏面に X 負方向から挿入 (mobo とだけ
+ ;;   嵌合なので親子除外で通る)。
+ ;;   cooler Y 20-115 / Z 20-115 は riser (Y 60-90, Z 8-208) と YZ が重なるので、
+ ;;   riser を Z 奥へ寄せて cooler と Z 分離させる (cooler Z<115 < riser Z 130-)。
+ ;;   gpu Y 30-140 / Z 8-275 は cooler と Y/Z 重なる — riser を cooler の
+ ;;   Y 範囲外 (Y 125-) に置き、gpu も Y 125- に寄せる (ADR の gpu は mobo 下端側)。
+ ;;   psu Z 180-280 は gpu (Z 8-275) と Z 重なるが Y 3-66 vs gpu Y 125-170 で分離。
+ ;; 挿入の意味論: sim の insert-path は「挿入軸に沿って無限遠から target までの
+ ;; 掃引帯に、target より手前にある他部材」を障害とする。ADR-2607270000 の
+ ;; bench 先組み (cpu/m.2/ram/クーラー/ライザーは全て mobo に先に付く) では、
+ ;; これらは「外から挿入する部材」ではなく subassembly 構成員である。
+ ;; 宣言ではそれを insert-axis :none で表す (挿入検査の対象外 — 先組み部材)。
+ ;; 外から入るのは mobo サブアセンブリ一体 (+x)、gpu (+x)、psu (+x) のみ。
+ :placements
+ [{:part/id "ssd-m2"      :at [3 60 30]}
+  {:part/id "mobo-b650i"  :at [7 3 3]}
+  {:part/id "cpu-7700"    :at [43 30 30]}
+  {:part/id "cooler-lp"   :at [51 20 20]}
+  {:part/id "ram-ddr5"    :at [43 130 6]}
+  {:part/id "riser"       :at [43 130 178]}
+  {:part/id "gpu-b70"     :at [100 3 8]}
+  {:part/id "psu-sfx750"  :at [3 3 300]}]}

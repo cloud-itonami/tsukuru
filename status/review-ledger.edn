@@ -1,0 +1,1 @@
+{:at "2026-09-03T10:13:36Z" :product "mk1-sandwich" :verdict :pass :reason "BOM 8部材すべて id+envelope あり・重複なし; mounts-on 6参照すべて BOM 内に親存在; envelope 最大辺>=100mm の mobo/ram/riser/gpu/psu に insert-axis あり; cto と PSU 着脱ブラケット構成が整合"}

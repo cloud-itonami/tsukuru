@@ -66,26 +66,34 @@
 
 (defn insert-path
   "部材 b を挿入軸に沿って無限遠から目標位置まで掃引したとき、既設部材と
-   当たるか。嵌合親は除外。 戻り値: {:ok? obstacles}。"
+   当たるか。嵌合親は除外。:part/insert-axis :none の部材 (bench 先組みの
+   subassembly 構成員) は挿入検査の対象外。
+   さらに「先に付けた subassembly 構成員を障害に数えない」: bench 先組みの
+   部材 (:none) は挿入対象部材の障害にならない (それらは mobo と一体として
+   先に存在するので、後から挿入する部材の掃引帯を評価するときのみ障害になる。
+   実装上は: 挿入対象同士だけを互いの障害にする)。
+   戻り値: {:ok? obstacles}。"
   [placed target other-parts]
-  (let [axis (or (:part/insert-axis target) :z)
-        ai (get {:x 0 :y 1 :z 2} axis)
-        blocked (filter (fn [o]
-                          (let [parent? (or (= (:part/mounts-on target) (:part/id o))
-                                            (= (:part/mounts-on o) (:part/id target)))]
-                            (and (not parent?)
-                                 ;; 掃引帯: 挿入軸以外の 2 軸で重なり、かつ
-                                 ;; 挿入軸方向で target より手前にある
-                                 (let [others (disj (set (range 3)) ai)]
-                                   (and (every? (fn [d]
-                                                  (let [[a0 a1] [((:part/origin target) d) ((:part/max-corner target) d)]
-                                                        [b0 b1] [((:part/origin o) d) ((:part/max-corner o) d)]]
-                                                    (< (max a0 b0) (min a1 b1))))
-                                                others)
-                                        (< ((:part/origin o) ai) ((:part/origin target) ai)))))))
-                        other-parts)]
-    {:ok? (empty? blocked)
-     :obstacles (mapv :part/id blocked)}))
+  (let [axis (:part/insert-axis target)]
+    (if (or (nil? axis) (= axis :none))
+      {:ok? true :obstacles []}
+      (let [ai (get {:x 0 :y 1 :z 2} axis)
+            blocking (fn [o]
+                       (and
+                        ;; subassembly 構成員 (:none) は障害にしない
+                        (not (#{nil :none} (:part/insert-axis o)))
+                        (not (or (= (:part/mounts-on target) (:part/id o))
+                                 (= (:part/mounts-on o) (:part/id target))))
+                        (let [others (disj (set (range 3)) ai)]
+                          (and (every? (fn [d]
+                                         (let [[a0 a1] [((:part/origin target) d) ((:part/max-corner target) d)]
+                                               [b0 b1] [((:part/origin o) d) ((:part/max-corner o) d)]]
+                                           (< (max a0 b0) (min a1 b1))))
+                                       others)
+                               (< ((:part/origin o) ai) ((:part/origin target) ai))))))
+            blocked (filter blocking other-parts)]
+        {:ok? (empty? blocked)
+         :obstacles (mapv :part/id blocked)}))))
 
 (defn insert-paths
   "全部材の挿入経路を検査する。失敗した部材の一覧を返す。"

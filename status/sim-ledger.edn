@@ -1,0 +1,2 @@
+{:at "2026-09-03T17:27:07+0900" :product "mk1" :passed? false :findings 2 :kinds [:no-insert-path]}
+{:at "2026-09-03T18:56:42+09:00" :product "mk1" :passed? false :findings 2 :kinds [:no-insert-path]}
