@@ -1,0 +1,64 @@
+#usda 1.0
+(
+    defaultPrim = "mk1-enclosure-sandwich"
+    metersPerUnit = 0.001
+    upAxis = "Z"
+    doc = "tsukuru product 叢雲 MK-1 sandwich enclosure — AABB envelope export"
+)
+
+def Xform "mk1-enclosure-sandwich"
+{
+    custom double massGrams = 3400
+    def Xform "mobo"
+    {
+        def Cube "geometry"
+        {
+            float3 xformOp:translate = (88, 88, 23)
+            float3 xformOp:scale = (170, 170, 40)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+        double size = 1.0
+    }
+    def Xform "cpu-cooler"
+    {
+        def Cube "geometry"
+        {
+            float3 xformOp:translate = (67.5, 67.5, 23.5)
+            float3 xformOp:scale = (95, 95, 37)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+        double size = 1.0
+    }
+    def Xform "psu"
+    {
+        def Cube "geometry"
+        {
+            float3 xformOp:translate = (65.5, 34.75, 200)
+            float3 xformOp:scale = (125, 63.5, 100)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+        double size = 1.0
+    }
+    def Xform "gpu"
+    {
+        def Cube "geometry"
+        {
+            float3 xformOp:translate = (319.5, 79.5, 63.5)
+            float3 xformOp:scale = (267, 39, 111)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+        double size = 1.0
+    }
+    def Xform "riser"
+    {
+        def Cube "geometry"
+        {
+            float3 xformOp:translate = (140, 65, 38)
+            float3 xformOp:scale = (80, 10, 60)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+        double size = 1.0
+    }
+}
+# tsukuru.sim findings: [{:kind :no-insert-path, :severity :error, :parts ["psu"]} {:kind :no-insert-path, :severity :error, :parts ["riser"]}]
+# passed: false
