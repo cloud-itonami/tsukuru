@@ -1,0 +1,4 @@
+{:at "2026-09-03T23:01:24+09:00" :product "mk1-sandwich" :fulfillment-mode :cto
+ :bom-summary "8部材 / 2128g / 332W"
+ :record-kind "production_order"
+ :status :awaiting-human-approval}
